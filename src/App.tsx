@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Search from "./components/business/Search.tsx";
+import AiList from "./components/business/AiList.tsx";
+import aiList from "./constants/ai-list.ts";
+import {useState} from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("")
+    const searchResult = search ? aiList.filter(
+        (item) =>
+            item.name.toLowerCase().includes(search.toLowerCase()) || // İsimde eşleşme
+            item.keys.some((key) => key.toLowerCase().includes(search.toLowerCase())) // Anahtar kelimelerde eşleşme
+    ) : [];
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <div className="flex flex-col h-screen w-screen ">
+            <header className="h-1/5 bg-gray-900 p-10 ">
+                <div className="inline-flex items-center justify-center  w-full">
+                    <Search search={search} setSearch={setSearch}/>
+                </div>
+            </header>
+            <main className="flex-grow overflow-y-auto bg-gray-900 p-4">
+                <AiList aiList={searchResult}/>
+            </main>
+        </div>
+
+    )
 }
 
 export default App
